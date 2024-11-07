@@ -24,6 +24,14 @@ class Utility:
         except Exception as e:
             raise CustomException(e, sys)
 
+    def load_object(file_path):
+        try:
+            with open(file_path, "rb") as file_obj:
+                logging.info("File loaded..")
+                return dill.load(file_obj)
+        except Exception as e:
+            raise CustomException(e, sys)
+
     def evaluate_model(X_train, y_train, X_test, y_test, models, params):
         try:
             report = {}
@@ -51,3 +59,9 @@ class Utility:
             return report
         except:
             pass
+
+
+if __name__ == "__main__":
+    obj = Utility()
+    model_path = "artifacts\model.pkl"
+    print(obj.load_object(model_path))
