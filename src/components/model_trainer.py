@@ -40,14 +40,60 @@ class ModelTrainer:
                 test_array[:, -1],
             )
             models = {
-                "Random Forrest": RandomForestRegressor(),
+                "Random Forest": RandomForestRegressor(),
                 "Decision Tree": DecisionTreeRegressor(),
                 "Gradient Boosting Regressor": GradientBoostingRegressor(),
                 "Linear Regression": LinearRegression(),
                 "K-Neighbors Regressor": KNeighborsRegressor(),
-                "XG Boost Regressor": XGBRegressor(),
-                "Cat Boost Regressor": CatBoostRegressor(verbose=False),
+                "XGBoost Regressor": XGBRegressor(),
+                "CatBoost Regressor": CatBoostRegressor(verbose=False),
                 "AdaBoost Regressor": AdaBoostRegressor(),
+            }
+
+            params = {
+                "Decision Tree": {
+                    "criterion": [
+                        "squared_error",
+                        "friedman_mse",
+                        "absolute_error",
+                        "poisson",
+                    ],
+                    # 'splitter':['best','random'],
+                    # 'max_features':['sqrt','log2'],
+                },
+                "Random Forest": {
+                    # 'criterion':['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                    # 'max_features':['sqrt','log2',None],
+                    "n_estimators": [8, 16, 32, 64, 128, 256]
+                },
+                "Gradient Boosting Regressor": {
+                    # 'loss':['squared_error', 'huber', 'absolute_error', 'quantile'],
+                    "learning_rate": [0.1, 0.01, 0.05, 0.001],
+                    "subsample": [0.6, 0.7, 0.75, 0.8, 0.85, 0.9],
+                    # 'criterion':['squared_error', 'friedman_mse'],
+                    # 'max_features':['auto','sqrt','log2'],
+                    "n_estimators": [8, 16, 32, 64, 128, 256],
+                },
+                "Linear Regression": {},
+                "K-Neighbors Regressor": {
+                    "n_neighbors": [5, 7, 9, 11],
+                    # "weights": ["uniform", "distance"],
+                    # "algorithm": ["ball_tree", "kd_tree", "brute"],
+                },
+                "XGBoost Regressor": {
+                    "learning_rate": [0.1, 0.01, 0.05, 0.001],
+                    "n_estimators": [8, 16, 32, 64, 128, 256],
+                },
+                "CatBoost Regressor": {
+                    "depth": [6, 8, 10],
+                    "learning_rate": [0.01, 0.05, 0.1],
+                    "iterations": [30, 50, 100],
+                },
+                "AdaBoost Regressor": {
+                    "learning_rate": [0.1, 0.01, 0.5, 0.001],
+                    # 'loss':['linear','square','exponential'],
+                    "n_estimators": [8, 16, 32, 64, 128, 256],
+                },
             }
 
             model_report: dict = Utility.evaluate_model(
@@ -56,6 +102,7 @@ class ModelTrainer:
                 X_test=X_test,
                 y_test=y_test,
                 models=models,
+                params=params,
             )
 
             logging.info(f"model_report : {model_report}")
